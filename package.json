@@ -15,7 +15,7 @@
     "lint": "stylelint src/*.css",
     "toc": "markdown-toc --maxdepth 3 -i README.md",
     "build": "mkdir -p dist && rm -rf ./dist/* && cp ./src/*.css dist && npm run build:min",
-    "build:min": "postcss src/*.css --use cssnano postcss-nesting --dir dist --ext .min.css",
+    "build:min": "for file in src/*.css; do lightningcss --minify --output-file \"dist/$(basename \"${file%.css}.min.css\")\" \"$file\"; done",
     "preversion": "npm run lint && npm run build && npm run build:min",
     "version": "npm run toc && auto-changelog -p --template keepachangelog --breaking-pattern 'BREAKING CHANGE:' && git add CHANGELOG.md README.md",
     "postversion": "git push --follow-tags && npm publish",
@@ -24,10 +24,8 @@
   "dependencies": {},
   "devDependencies": {
     "auto-changelog": "^2.4.0",
-    "cssnano": "^8.0.1",
+    "lightningcss-cli": "^1.32.0",
     "markdown-toc": "^1.2.0",
-    "postcss": "^8.4.49",
-    "postcss-cli": "^11.0.0",
     "stylelint": "^17.1.0",
     "stylelint-config-standard": "^40.0.0"
   },
